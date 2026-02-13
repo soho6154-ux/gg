@@ -3,244 +3,292 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Be My Valentine 💖</title>
+<title>💖 Will You Be My Valentine? 💖</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: 'Pacifico', cursive;
-    background: linear-gradient(120deg, #ff9a9e, #fad0c4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
+/* Base Styles */
+html, body {
+  margin:0; padding:0; width:100%; height:100%;
+  font-family:'Pacifico', cursive;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+  overflow:hidden;
+}
 
-  #bgMusic {
-    display: none;
-  }
+canvas { position:absolute; top:0; left:0; pointer-events:none; z-index:1; }
 
-  .container {
-    text-align: center;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 50px;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
-    position: relative;
-    z-index: 2;
-  }
+/* Container */
+.container {
+  position:relative; z-index:2;
+  background: rgba(255,255,255,0.95);
+  padding:40px;
+  border-radius:25px;
+  text-align:center;
+  max-width:600px;
+  margin:20px auto;
+  box-shadow: 0 0 50px rgba(0,0,0,0.25);
+}
 
-  h1 {
-    font-size: 3em;
-    margin-bottom: 20px;
-    color: #ff4d6d;
-  }
+h1 {
+  font-size:3em; color:#ff4d6d; text-shadow:0 0 10px #ffb6b9;
+  margin-bottom:15px;
+}
 
-  p {
-    font-size: 1.5em;
-    margin-bottom: 30px;
-    color: #ff4d6d;
-  }
+p { font-size:1.3em; color:#ff4d6d; margin-bottom:20px; }
 
-  button {
-    font-size: 1.2em;
-    padding: 15px 30px;
-    margin: 10px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.3s;
-    color: white;
-  }
+button {
+  font-size:1.2em; padding:12px 25px; margin:10px;
+  border:none; border-radius:15px; cursor:pointer;
+  color:white; transition: all 0.25s ease;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+#yesBtn { background: #ff4d6d; }
+#noBtn { background: #ffb6b9; position:relative; }
 
-  #yesBtn { background: #ff4d6d; }
-  #noBtn { background: #ffb6b9; position: relative; }
+button:hover { transform: scale(1.1); }
 
-  .heart {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: red;
-    transform: rotate(-45deg);
-    animation: floatUp linear infinite;
-  }
+/* Hearts & Particles */
+.heart {
+  position:absolute; width:20px; height:20px;
+  background:red; transform:rotate(-45deg);
+  animation: floatUp linear infinite;
+}
+.heart:before, .heart:after {
+  content:""; position:absolute; width:20px; height:20px;
+  background:red; border-radius:50%;
+}
+.heart:before { top:-10px; left:0; }
+.heart:after { left:10px; top:0; }
 
-  .heart:before,
-  .heart:after {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: red;
-    border-radius: 50%;
-  }
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(-45deg); opacity:1; }
+  100% { transform: translateY(-120vh) rotate(-45deg); opacity:0; }
+}
 
-  .heart:before { top: -10px; left: 0; }
-  .heart:after { left: 10px; top: 0; }
+/* Gifts */
+.gift {
+  position:absolute; width:50px; height:50px;
+  background:url('gift.png') no-repeat center center;
+  background-size:contain; cursor:pointer;
+  transition: transform 0.25s ease, filter 0.25s ease;
+  z-index:3;
+}
+.gift:hover { transform: scale(1.3) rotate(-15deg); filter: drop-shadow(0 0 10px #ff4d6d); }
 
-  @keyframes floatUp {
-    0% { transform: translateY(0) rotate(-45deg); opacity: 1; }
-    100% { transform: translateY(-100vh) rotate(-45deg); opacity: 0; }
-  }
+/* Proposal Text */
+#proposalText {
+  font-size:1.3em; color:#ff4d6d; min-height:60px; margin-top:20px;
+}
 
-  canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 1;
-  }
+/* Love Letter Overlay */
+#loveLetter {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.95); color:#ffb6b9;
+  display:flex; justify-content:center; align-items:center;
+  text-align:center; padding:30px; font-size:1.2em;
+  line-height:1.6em; z-index:10; visibility:hidden;
+  overflow-y:auto;
+}
+#loveLetter button {
+  margin-top:20px; padding:12px 25px; font-size:1.1em;
+  background:#ff4d6d; color:white; border:none; border-radius:12px;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+#loveLetter button:hover { transform: scale(1.1); }
 
-  .gift {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background: url('https://cdn-icons-png.flaticon.com/512/616/616408.png') no-repeat center center;
-    background-size: contain;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-
-  .gift:hover { transform: scale(1.2) rotate(-15deg); }
+/* Music Control */
+#musicControl {
+  position:fixed; bottom:20px; right:20px;
+  background:#ff4d6d; color:white; border:none; border-radius:50%;
+  width:50px; height:50px; cursor:pointer; font-size:1.5em;
+  display:flex; justify-content:center; align-items:center;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  z-index:5;
+}
+#musicControl:hover { transform: scale(1.2); }
 </style>
 </head>
 <body>
 
-<audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop autoplay></audio>
+<audio id="bgMusic" src="music.mp3" loop autoplay></audio>
+<button id="musicControl">🔊</button>
 
 <canvas id="confetti"></canvas>
+
 <div class="container">
   <h1>💖 Will You Be My Valentine? 💖</h1>
   <p>Click carefully...</p>
   <button id="yesBtn">Yes 😍</button>
   <button id="noBtn">No 😢</button>
-  <p id="secretMessage" style="margin-top:20px; font-size:1em; color:#ff4d6d;"></p>
+  <div id="proposalText"></div>
+</div>
+
+<div id="loveLetter">
+  <div>
+    <p>My Dearest Love,</p>
+    <p>Every day with you fills my heart with joy. Your smile, your laughter, your very presence lights up my world.  
+    I want to share every dream, every adventure, every moment with you.  
+    You are my heart, my soul, my everything.</p>
+    <p>Will you be my Valentine forever and always?</p>
+    <button onclick="closeLetter()">💖 I Say Yes! 💖</button>
+  </div>
 </div>
 
 <script>
-  const yesBtn = document.getElementById('yesBtn');
-  const noBtn = document.getElementById('noBtn');
-  const secret = document.getElementById('secretMessage');
-  const body = document.body;
+// Elements
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const proposalText = document.getElementById('proposalText');
+const loveLetter = document.getElementById('loveLetter');
+const body = document.body;
+const music = document.getElementById('bgMusic');
+const musicBtn = document.getElementById('musicControl');
 
-  // Floating hearts
-  function createHearts(num) {
-    for (let i = 0; i < num; i++) {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * window.innerWidth + 'px';
-      heart.style.animationDuration = 2 + Math.random() * 3 + 's';
-      body.appendChild(heart);
-      setTimeout(() => heart.remove(), 5000);
-    }
+// Cursor-following hearts
+body.addEventListener('mousemove', e => {
+  const heart = document.createElement('div');
+  heart.className='heart';
+  heart.style.left = e.clientX+'px';
+  heart.style.top = e.clientY+'px';
+  heart.style.animationDuration = '1.2s';
+  body.appendChild(heart);
+  setTimeout(()=>heart.remove(),1500);
+});
+
+// Typing effect
+function typeText(element,text,delay=40){
+  element.textContent='';
+  let i=0;
+  const interval = setInterval(()=>{
+    element.textContent+=text.charAt(i);
+    i++;
+    if(i>=text.length) clearInterval(interval);
+  },delay);
+}
+
+// Floating hearts
+function createHearts(num){
+  for(let i=0;i<num;i++){
+    const heart=document.createElement('div');
+    heart.className='heart';
+    heart.style.left=Math.random()*window.innerWidth+'px';
+    heart.style.animationDuration=(2+Math.random()*2)+'s';
+    body.appendChild(heart);
+    setTimeout(()=>heart.remove(),5000);
   }
+}
 
-  // Confetti
-  const canvas = document.getElementById('confetti');
-  const ctx = canvas.getContext('2d');
+// Confetti
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+let confettiParticles=[];
+function createConfetti(num){
+  for(let i=0;i<num;i++){
+    confettiParticles.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      r:Math.random()*6+4,
+      d:Math.random()*num,
+      color:`hsl(${Math.random()*360},100%,50%)`,
+      tilt:Math.random()*10-10,
+      tiltAngleIncrement:Math.random()*0.07+0.05,
+      tiltAngle:0
+    });
+  }
+}
+function drawConfetti(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  confettiParticles.forEach(p=>{
+    ctx.beginPath();
+    ctx.lineWidth=p.r/2;
+    ctx.strokeStyle=p.color;
+    ctx.moveTo(p.x+p.tilt+p.r/4,p.y);
+    ctx.lineTo(p.x+p.tilt,p.y+p.tilt+p.r/4);
+    ctx.stroke();
+  });
+  updateConfetti();
+}
+function updateConfetti(){
+  confettiParticles.forEach(p=>{
+    p.tiltAngle+=p.tiltAngleIncrement;
+    p.y+=(Math.cos(p.d)+3+p.r/2)/2;
+    p.tilt=Math.sin(p.tiltAngle)*15;
+    if(p.y>canvas.height)p.y=-10;
+  });
+}
+let confettiInterval;
+function startConfetti(){
+  confettiParticles=[];
+  createConfetti(200);
+  if(confettiInterval) clearInterval(confettiInterval);
+  confettiInterval=setInterval(drawConfetti,20);
+  setTimeout(()=>clearInterval(confettiInterval),5000);
+}
+
+// Gifts
+function spawnGifts(num){
+  for(let i=0;i<num;i++){
+    const gift=document.createElement('div');
+    gift.className='gift';
+    gift.style.left=Math.random()*(window.innerWidth-50)+'px';
+    gift.style.top=Math.random()*(window.innerHeight-50)+'px';
+    body.appendChild(gift);
+    gift.addEventListener('click',()=>{
+      createHearts(20);
+      startConfetti();
+      typeText(proposalText,"🎁 You found a secret gift! 💖");
+      gift.remove();
+    });
+    setTimeout(()=>gift.remove(),10000);
+  }
+}
+
+// Yes Button
+yesBtn.addEventListener('click',()=>{
+  createHearts(50);
+  startConfetti();
+  typeText(proposalText,"💖 I knew you'd say yes! Here's a love letter...");
+  setTimeout(()=>loveLetter.style.visibility='visible',1500);
+  spawnGifts(5);
+});
+
+// No Button avoids click
+noBtn.addEventListener('mouseenter',()=>{
+  const x=Math.random()*(window.innerWidth-noBtn.offsetWidth);
+  const y=Math.random()*(window.innerHeight-noBtn.offsetHeight);
+  noBtn.style.position='absolute';
+  noBtn.style.left=x+'px';
+  noBtn.style.top=y+'px';
+});
+
+// Close love letter
+function closeLetter(){
+  loveLetter.style.visibility='hidden';
+  typeText(proposalText,"💖 I can't wait for our future together! 💖");
+}
+
+// Music control
+musicBtn.addEventListener('click',()=>{
+  if(music.paused){ music.play(); musicBtn.textContent='🔊'; }
+  else{ music.pause(); musicBtn.textContent='🔇'; }
+});
+
+// Background click secret
+body.addEventListener('click', e=>{
+  if(e.target===body){
+    createHearts(20);
+    typeText(proposalText,"✨ You found a secret! ✨");
+  }
+});
+
+// Resize canvas
+window.addEventListener('resize', ()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  let confettiParticles = [];
-
-  function createConfetti(num) {
-    for (let i = 0; i < num; i++) {
-      confettiParticles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 6 + 4,
-        d: Math.random() * num,
-        color: `hsl(${Math.random()*360},100%,50%)`,
-        tilt: Math.random() * 10 - 10,
-        tiltAngleIncrement: Math.random() * 0.07 + 0.05,
-        tiltAngle: 0
-      });
-    }
-  }
-
-  function drawConfetti() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    confettiParticles.forEach(p => {
-      ctx.beginPath();
-      ctx.lineWidth = p.r/2;
-      ctx.strokeStyle = p.color;
-      ctx.moveTo(p.x + p.tilt + p.r/4, p.y);
-      ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/4);
-      ctx.stroke();
-    });
-    updateConfetti();
-  }
-
-  function updateConfetti() {
-    confettiParticles.forEach(p => {
-      p.tiltAngle += p.tiltAngleIncrement;
-      p.y += (Math.cos(p.d) + 3 + p.r/2)/2;
-      p.tilt = Math.sin(p.tiltAngle)*15;
-      if (p.y > canvas.height) p.y = -10;
-    });
-  }
-
-  let confettiInterval;
-  function startConfetti() {
-    confettiParticles = [];
-    createConfetti(150);
-    if(confettiInterval) clearInterval(confettiInterval);
-    confettiInterval = setInterval(drawConfetti, 20);
-    setTimeout(()=>clearInterval(confettiInterval), 5000);
-  }
-
-  // Yes Button
-  yesBtn.addEventListener('click', () => {
-    createHearts(50);
-    startConfetti();
-    secret.textContent = "💖 I knew you'd say yes! Click gifts for surprises!";
-    spawnGifts(5);
-  });
-
-  // No Button runs away
-  noBtn.addEventListener('mouseenter', () => {
-    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-    noBtn.style.position = 'absolute';
-    noBtn.style.left = x + 'px';
-    noBtn.style.top = y + 'px';
-  });
-
-  // Secret click
-  body.addEventListener('click', (e) => {
-    if(e.target === body) {
-      secret.textContent = "✨ You found the secret! ✨";
-      createHearts(20);
-    }
-  });
-
-  // Gifts
-  function spawnGifts(num) {
-    for(let i=0;i<num;i++){
-      const gift = document.createElement('div');
-      gift.className = 'gift';
-      gift.style.left = Math.random()*(window.innerWidth-50)+'px';
-      gift.style.top = Math.random()*(window.innerHeight-50)+'px';
-      body.appendChild(gift);
-      gift.addEventListener('click', () => {
-        secret.textContent = "🎁 Surprise! You made me so happy! 💖";
-        createHearts(20);
-        startConfetti();
-        gift.remove();
-      });
-      setTimeout(()=>gift.remove(),10000); // gifts disappear after 10s
-    }
-  }
-
-  // Adjust canvas on resize
-  window.addEventListener('resize',()=>{
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
+});
 </script>
 
 </body>
